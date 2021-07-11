@@ -1,10 +1,13 @@
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.button import Button
 from math import sqrt
 
+Window.clearcolor = (1, 1, 1, 1)
 
 class CalculatorApp(App):
     def __init__(self, **kwargs):
@@ -13,8 +16,9 @@ class CalculatorApp(App):
         self.brac = 0 # 0 for '(' and 1 for ')'
         self.layout = BoxLayout()
         self.layout.orientation = "vertical"
-
-        self.textarea = TextInput(font_size = "45sp",disabled = True,size_hint = (1,0.5),background_color = (255,255,255,1))
+        self.scrollable = ScrollView(size_hint=(1, 0.7))
+        self.textarea = TextInput(font_size = "45sp",disabled = True,size_hint = (1,3),background_color = (255,255,255,1))
+        self.scrollable.add_widget(self.textarea)
         #self.textarea.foreground_color = (0,0,0,1)
         # self.textarea.hint_text = "Enter number"
         self.GridInside = GridLayout()
@@ -47,15 +51,14 @@ class CalculatorApp(App):
         for i, self.btn in enumerate(self.btn_list):
             if i <= 1:
                 self.btn.font_size = "40sp"    
-                # self.btn.background_color = (255,255,255,1)
-                # self.btn.color = "black"
+                self.btn.background_color = (.4,.5,.6,1)
                
             else:
-                # self.btn.background_color = "black"
+                self.btn.background_color = (.4,.5,.6,1)
                 self.btn.font_size = "50sp"
             self.GridInside.add_widget(self.btn)
 
-        self.layout.add_widget(self.textarea)
+        self.layout.add_widget(self.scrollable)
         self.layout.add_widget(self.GridInside)
 
 
@@ -68,6 +71,7 @@ class CalculatorApp(App):
         if command == "ac":
             self.textarea.text = ""
             self.equation = ""
+            self.scrollable.scroll_y=1
         if command == "del":
             self.equation = self.equation[:-1]
             self.textarea.text = self.equation
